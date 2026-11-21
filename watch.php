@@ -29,7 +29,7 @@ $rating = $item_info['rating'] ?? '0.0';
 $year = $item_info['year'] ?? '';
 $genres = $item_info['genre'] ?? [];
 
-$api_key = "4e44d9029b1270a757cddc766a1bcb63";
+$api_key = TMDB_API_KEY;
 $details = [];
 
 if (!empty($id)) {

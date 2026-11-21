@@ -1,4 +1,7 @@
 <?php
+// TMDB API Configuration
+defined('TMDB_API_KEY') or define('TMDB_API_KEY', getenv('TMDB_API_KEY') ?: '4e44d9029b1270a757cddc766a1bcb63');
+
 /**
  * Movies & Series Streaming Platform
  * Engineered & Developed by 0dh4m (Adham Cherkaoui Eddeqaqi)

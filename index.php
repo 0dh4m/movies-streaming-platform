@@ -41,7 +41,7 @@ usort($series, function($a, $b) use ($series_sort) {
 });
 
 // اختيار فيلم قوي للهيرو
-$api_key = "4e44d9029b1270a757cddc766a1bcb63";
+$api_key = TMDB_API_KEY;
 $popular_heroes = array_values(array_filter($database['movies'] ?? [], function($m) {
     return floatval($m['rating'] ?? 0) >= 6.5;
 }));
@@ -347,7 +347,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // 2. أكواد النافذة المنبثقة (Modal Engine) المترجمة
-const apiKey = "4e44d9029b1270a757cddc766a1bcb63";
+const apiKey = "<?= TMDB_API_KEY ?>";
 let activeModalItem = null;
 
 const modalLang = <?php echo json_encode([
