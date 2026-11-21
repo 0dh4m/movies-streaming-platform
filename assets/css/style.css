@@ -1,0 +1,151 @@
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;600;800;900&family=Space+Grotesk:wght@500;700;900&display=swap');
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --bg-primary: #020204;
+    --cyan-glow: #06b6d4;
+    --purple-glow: #a855f7;
+    --amber-gold: #f59e0b;
+}
+
+html, body {
+    font-family: 'Tajawal', sans-serif;
+    background-color: var(--bg-primary);
+    color: #f1f5f9;
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
+    touch-action: manipulation;
+    cursor: default;
+}
+
+/* Ambient Radial Glow */
+#spotlight-glow {
+    position: fixed;
+    width: 850px;
+    height: 850px;
+    background: radial-gradient(circle, rgba(6, 182, 212, 0.08) 0%, rgba(168, 85, 247, 0.04) 40%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 1;
+    transform: translate(-50%, -50%);
+    transition: opacity 0.4s ease;
+}
+
+/* إخفاء المؤشرات المخصصة في الهواتف وشاشات اللمس */
+@media (pointer: coarse) {
+    #custom-cursor, #custom-cursor-follower, #spotlight-glow {
+        display: none !important;
+    }
+}
+
+/* Interactive Futuristic Cursors */
+#custom-cursor {
+    position: fixed;
+    width: 8px;
+    height: 8px;
+    background: var(--cyan-glow);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 15px var(--cyan-glow), 0 0 30px var(--cyan-glow);
+    transition: transform 0.05s ease, width 0.25s ease, height 0.25s ease, background-color 0.25s ease;
+}
+
+#custom-cursor-follower {
+    position: fixed;
+    width: 38px;
+    height: 38px;
+    border: 1px solid rgba(6, 182, 212, 0.45);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: transform 0.16s cubic-bezier(0.2, 0.8, 0.2, 1), width 0.25s ease, height 0.25s ease, border-color 0.25s ease, background-color 0.25s ease;
+}
+
+/* Luxurious Sci-Fi Glass Panels */
+.lux-glass {
+    background: rgba(10, 10, 18, 0.7);
+    backdrop-filter: blur(28px);
+    -webkit-backdrop-filter: blur(28px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+/* 3D Tilt Stream Cards (Smooth 60FPS) */
+.sci-card {
+    position: relative;
+    border-radius: 1.5rem;
+    overflow: hidden;
+    background: rgba(15, 15, 25, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    transform-style: preserve-3d;
+    perspective: 1000px;
+    will-change: transform;
+    transition: border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+.sci-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(400px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(6, 182, 212, 0.25), transparent 60%);
+    z-index: 20;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.sci-card:hover::before {
+    opacity: 1;
+}
+
+.sci-card:hover {
+    border-color: rgba(6, 182, 212, 0.65);
+    box-shadow: 0 20px 45px -10px rgba(6, 182, 212, 0.35), 0 0 25px rgba(6, 182, 212, 0.15);
+}
+
+.sci-overlay {
+    opacity: 0;
+    transform: translateY(15px);
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    background: linear-gradient(to top, rgba(2, 2, 6, 0.98) 15%, rgba(2, 2, 6, 0.7) 60%, transparent 100%);
+    pointer-events: none;
+}
+
+.sci-card:hover .sci-overlay {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Glowing Neon Buttons */
+.btn-neon-cyan {
+    background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+    box-shadow: 0 0 25px rgba(6, 182, 212, 0.45);
+    transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.btn-neon-cyan:hover {
+    box-shadow: 0 0 45px rgba(6, 182, 212, 0.85);
+    transform: scale(1.04);
+}
+
+.btn-neon-purple {
+    background: linear-gradient(135deg, #a855f7 0%, #6366f1 100%);
+    box-shadow: 0 0 25px rgba(168, 85, 247, 0.45);
+    transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.btn-neon-purple:hover {
+    box-shadow: 0 0 45px rgba(168, 85, 247, 0.85);
+    transform: scale(1.04);
+}
+
+/* Utilities */
+.scrollbar-none::-webkit-scrollbar { display: none; }
+.scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
