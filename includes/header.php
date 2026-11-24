@@ -2,7 +2,7 @@
 /**
  * Movies & Series Streaming Platform
  * Engineered & Developed by 0dh4m (Adham Cherkaoui Eddeqaqi)
- * Contact: 0dh4mm@gmail.com | Portfolio: https://0dh4m.github.io/portfolio
+ * Contact: 0dh4mm@gmail.com | Portfolio: https://0dh4m.github.io
  * Copyright (c) 2026 0dh4m. All rights reserved.
  */
 
@@ -19,6 +19,11 @@ $current_lang = $_SESSION['lang'] ?? 'ar';
 $lang_file = __DIR__ . "/../lang/{$current_lang}.php";
 $trans = file_exists($lang_file) ? require $lang_file : [];
 $dir = ($current_lang === 'ar') ? 'rtl' : 'ltr';
+
+// Record one visit per session for visitors.php (fails silently).
+if (isset($pdo) && $pdo instanceof PDO && function_exists('logVisitor')) {
+    logVisitor($pdo);
+}
 ?>
 <!DOCTYPE html>
 <html lang="<?php echo $current_lang; ?>" dir="<?php echo $dir; ?>">

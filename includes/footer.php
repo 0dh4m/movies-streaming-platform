@@ -2,9 +2,10 @@
 /**
  * Movies & Series Streaming Platform
  * Engineered & Developed by 0dh4m (Adham Cherkaoui Eddeqaqi)
- * Contact: 0dh4mm@gmail.com | Portfolio: https://0dh4m.github.io/portfolio
+ * Contact: 0dh4mm@gmail.com | Portfolio: https://0dh4m.github.io
  * Copyright (c) 2026 0dh4m. All rights reserved.
  */
+?>
 <footer class="border-t border-white/10 bg-black/60 py-10 relative z-20">
         <div class="max-w-[1500px] mx-auto px-6 sm:px-12 flex flex-col sm:flex-row items-center justify-between gap-6">
             <div class="flex items-center gap-2.5" style="direction: ltr; font-family: 'Space Grotesk', monospace;">
