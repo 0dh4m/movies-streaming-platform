@@ -2,7 +2,7 @@
 /**
  * Movies & Series Streaming Platform
  * Engineered & Developed by 0dh4m (Adham Cherkaoui Eddeqaqi)
- * Contact: 0dh4mm@gmail.com | Portfolio: https://0dh4m.github.io/portfolio
+ * Contact: 0dh4mm@gmail.com | Portfolio: https://0dh4m.github.io
  * Copyright (c) 2026 0dh4m. All rights reserved.
  */
 

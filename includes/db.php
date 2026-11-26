@@ -1,24 +1,25 @@
 <?php
-// TMDB API Configuration
-defined('TMDB_API_KEY') or define('TMDB_API_KEY', getenv('TMDB_API_KEY') ?: '4e44d9029b1270a757cddc766a1bcb63');
+// TMDB API Configuration (optional: only used by the details modal)
+defined('TMDB_API_KEY') or define('TMDB_API_KEY', getenv('TMDB_API_KEY') ?: '');
 
 /**
  * Movies & Series Streaming Platform
  * Engineered & Developed by 0dh4m (Adham Cherkaoui Eddeqaqi)
- * Contact: 0dh4mm@gmail.com | Portfolio: https://0dh4m.github.io/portfolio
+ * Contact: 0dh4mm@gmail.com | Portfolio: https://0dh4m.github.io
  * Copyright (c) 2026 0dh4m. All rights reserved.
  */
 
-$host = 'sql111.ezyro.com'; 
-$db   = 'ezyro_42788498_cinehub_db';
-$user = 'ezyro_42788498'; 
-$pass = 'أكتب_كلمة_سر_cpanel_هنا'; 
+$host = getenv('MOVIES_DB_HOST') ?: 'localhost';
+$db   = getenv('MOVIES_DB_NAME') ?: 'cinehub_db';
+$user = getenv('MOVIES_DB_USER') ?: 'root';
+$pass = getenv('MOVIES_DB_PASS') ?: '';
+$port = getenv('MOVIES_DB_PORT') ?: '3306';
 
 try {
-    $pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8mb4", $user, $pass);
+    $pdo = new PDO("mysql:host=$host;port=$port;dbname=$db;charset=utf8mb4", $user, $pass);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (\PDOException $e) {
-    die("خطأ في الاتصال بقاعدة البيانات: " . $e->getMessage());
+    die("Database connection failed: " . $e->getMessage());
 }
 
 function getDatabase() {
@@ -70,5 +71,50 @@ function getGenresWithCount($items) {
 
     arsort($counts);
     return $counts;
+}
+
+/**
+ * Record one visit per browser session for the admin analytics page.
+ * Analytics must never break the public site.
+ */
+function logVisitor($pdo) {
+    if (!$pdo instanceof PDO) {
+        return;
+    }
+
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+
+    if (!empty($_SESSION['visitor_logged'])) {
+        return;
+    }
+
+    $ip = $_SERVER['REMOTE_ADDR'] ?? '';
+    $ua = $_SERVER['HTTP_USER_AGENT'] ?? '';
+
+    $browser = 'Unknown';
+    foreach (['Edg' => 'Edge', 'OPR' => 'Opera', 'Chrome' => 'Chrome', 'Firefox' => 'Firefox', 'Safari' => 'Safari'] as $needle => $label) {
+        if (stripos($ua, $needle) !== false) {
+            $browser = $label;
+            break;
+        }
+    }
+
+    $os = 'Unknown';
+    foreach (['Windows' => 'Windows', 'Android' => 'Android', 'iPhone' => 'iOS', 'iPad' => 'iOS', 'Mac OS' => 'macOS', 'Linux' => 'Linux'] as $needle => $label) {
+        if (stripos($ua, $needle) !== false) {
+            $os = $label;
+            break;
+        }
+    }
+
+    try {
+        $stmt = $pdo->prepare("INSERT INTO visitors_log (ip_address, browser, os) VALUES (?, ?, ?)");
+        $stmt->execute([$ip, $browser, $os]);
+        $_SESSION['visitor_logged'] = true;
+    } catch (\PDOException $e) {
+        // Ignore analytics failures.
+    }
 }
 ?>

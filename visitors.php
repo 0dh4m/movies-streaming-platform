@@ -2,7 +2,7 @@
 /**
  * Movies & Series Streaming Platform
  * Engineered & Developed by 0dh4m (Adham Cherkaoui Eddeqaqi)
- * Contact: 0dh4mm@gmail.com | Portfolio: https://0dh4m.github.io/portfolio
+ * Contact: 0dh4mm@gmail.com | Portfolio: https://0dh4m.github.io
  * Copyright (c) 2026 0dh4m. All rights reserved.
  */
 
@@ -14,11 +14,8 @@ if (session_status() === PHP_SESSION_NONE) {
 
 $error = "";
 
-// 1. جلب كلمة السر من جدول الإعدادات مباشرة
-$stmt = $pdo->prepare("SELECT setting_value FROM settings WHERE setting_key = ?");
-$stmt->execute(['admin_password']);
-$admin_pass_row = $stmt->fetch(PDO::FETCH_ASSOC);
-$admin_password = $admin_pass_row['setting_value'] ?? 'adhub_secure_2026';
+// Admin access is controlled by the MOVIES_ADMIN_PASSWORD environment variable.
+$admin_password = getenv('MOVIES_ADMIN_PASSWORD') ?: '';
 
 // 2. جلب حالة الإعلانات المزعجة مباشرة من القاعدة (0 يعني معطلة)
 $stmt2 = $pdo->prepare("SELECT setting_value FROM settings WHERE setting_key = ?");
@@ -28,7 +25,9 @@ $show_annoying_ads = ($ads_row['setting_value'] ?? '0') === '1';
 
 // التحقق من إرسال كلمة السر عبر النموذج
 if (isset($_POST['admin_pass'])) {
-    if ($_POST['admin_pass'] === $admin_password) {
+    if ($admin_password === '') {
+        $error = "Admin access is disabled. Set MOVIES_ADMIN_PASSWORD on the server.";
+    } elseif (hash_equals($admin_password, (string)$_POST['admin_pass'])) {
         $_SESSION['is_admin'] = true;
         header("Location: visitors.php");
         exit();

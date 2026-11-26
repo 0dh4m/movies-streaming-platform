@@ -1,92 +1,160 @@
-# 🎬 Movies & Series Streaming Platform
+# 🎬 Movies & Series Catalog Platform
 
 [![Author](https://img.shields.io/badge/Author-Adham%20Cherkaoui%20Eddeqaqi%20(0dh4m)-10b981?style=for-the-badge)](https://github.com/0dh4m)
 [![PHP](https://img.shields.io/badge/PHP-8.2-777bb4?style=for-the-badge&logo=php&logoColor=white)](https://php.net/)
-[![Multilingual](https://img.shields.io/badge/Localization-AR%20%7C%20EN%20%7C%20FR%20%7C%20IT-f59e0b?style=for-the-badge)](lang/)
-[![Frontend](https://img.shields.io/badge/UI-Modern%20Dark%20Cinema-e11d48?style=for-the-badge)](assets/)
+[![MySQL](https://img.shields.io/badge/MySQL-PDO-4479a1?style=for-the-badge&logo=mysql&logoColor=white)](https://mysql.com/)
+[![Languages](https://img.shields.io/badge/Localization-AR%20%7C%20EN%20%7C%20FR%20%7C%20IT-f59e0b?style=for-the-badge)](lang/)
 [![License](https://img.shields.io/badge/License-Proprietary-blue?style=for-the-badge)](LICENSE)
 
-> **High-Performance Cinema & Series Streaming Web Platform** engineered by **Adham Cherkaoui Eddeqaqi (`0dh4m`)**. Features a comprehensive media catalog, live embedded video streaming, full multilingual internationalization (Arabic RTL, English, French, Italian), real-time search, user favorites, and visitor traffic analytics.
+> A PHP 8 + MySQL catalog for movies and series: browse by genre, search titles, save favorites, and open a watch page with third-party embed players.
+
+[Features](#-features) • [Stack](#-stack) • [Setup](#-setup) • [Environment](#-environment-variables) • [Limitations](#-limitations)
 
 ---
 
-## 🌟 Key Features & Highlights
+## ⚖️ Important notice
 
-1. **Rich Media Catalog & Streaming Engine (`index.php`, `watch.php`, `movies.php`, `series.php`):**
-   - High-definition video player integration with multi-server stream switching.
-   - Separate browsing views for trending Movies, latest TV series, and seasonal releases.
-   - Comprehensive media metadata: IMDb ratings, release year, genres, plot synopsis, and duration.
-
-2. **Multilingual Internationalization (i18n):**
-   - Seamless 4-language localization switcher:
-     - 🇲🇦 **Arabic (`lang/ar.php`):** Full Right-to-Left (RTL) typography and localized UI.
-     - 🇬🇧 **English (`lang/en.php`):** Global modern layout.
-     - 🇫🇷 **French (`lang/fr.php`):** Complete French localization.
-     - 🇮🇹 **Italian (`lang/it.php`):** Complete Italian localization.
-
-3. **Instant Search & Real-Time Filtering (`search.php`, `assets/js/main.js`):**
-   - Debounced instant query search across titles, directors, and cast.
-   - Category and release year filters with smooth transitions.
-
-4. **User Favorites & Watchlist (`favorites.php`):**
-   - Bookmark movies and series with instant LocalStorage / session synchronization.
-
-5. **Traffic & Analytics Tracking (`visitors.php`):**
-   - Real-time visitor logger tracking daily view counts, unique visitors, and geographic access.
+This repository **does not host or stream any video files**. The watch page embeds players from third-party providers (`vidsrc.me`, `embed.su`, `multiembed.mov`) by TMDB ID. You are responsible for complying with copyright law and the terms of those providers in your jurisdiction. The catalog and metadata are for demonstration and educational use.
 
 ---
 
-## 📂 Project Architecture
+## ✨ Features
 
-```
-├── index.php                 # Home showcase & featured cinema carousels
-├── movies.php                # Dedicated movies catalog & category browser
-├── series.php                # TV Series index & episode selector
-├── watch.php                 # Responsive cinema video player & streaming engine
-├── search.php                # Multi-criteria instant search
-├── favorites.php             # User saved watchlist & favorites
-├── visitors.php              # Real-time traffic analytics & visitor logs
-├── 404.php                   # Custom branded cinema error page
+- 🎞️ **MySQL-backed catalog** — movies and series stored in `media_items`, with title, poster, rating, year and comma-separated genres.
+- 🔎 **Browse and filter** — separate movie/series pages with genre filters, sorting by newest/oldest, top-rated filter and pagination.
+- 🔍 **Server-side title search** — `search.php` filters the catalog by title (no external search service).
+- ▶️ **Watch page** — opens a third-party embed by TMDB ID and lets the visitor switch between four providers.
+- ❤️ **Favorites** — saved in the browser's `localStorage`; no user accounts required.
+- 🌍 **Four languages** — Arabic (RTL), English, French and Italian, stored in `lang/*.php`.
+- 📊 **Admin visitor log** — `visitors.php` shows IP address, browser, OS and visit time for the last sessions, protected by an environment-configured password.
+- 🖼️ **Optional TMDB details modal** — when `TMDB_API_KEY` is set, the home page can fetch extra metadata from TMDB.
+
+> Favorites are local to each browser. There is no registration, login, ratings, comments or recommendation engine.
+
+---
+
+## 🛠️ Stack
+
+- **Backend:** PHP 8 with PDO prepared statements.
+- **Database:** MySQL 8 / MariaDB (`media_items`, `settings`, `visitors_log`).
+- **Frontend:** Tailwind CSS via CDN, vanilla JavaScript, custom CSS.
+- **Data source:** `data/movies.json` seed catalog (about 37k movies and 37k series) imported into MySQL.
+
+---
+
+## 📂 Project Structure
+
+```text
+movies-streaming-platform/
+├── index.php                 # Home page and optional TMDB details modal
+├── movies.php                # Movie catalog, genre filters, sorting, pagination
+├── series.php                # Series catalog
+├── watch.php                 # Third-party embed player and server switcher
+├── search.php                # Server-side title search
+├── favorites.php             # localStorage favorites page
+├── visitors.php              # Admin visitor log
+├── 404.php                   # Custom error page
 ├── assets/
-│   ├── css/style.css         # Dark cinema glassmorphism styles
-│   └── js/main.js            # Frontend interactivity, favorites & search
+│   ├── css/style.css
+│   └── js/main.js
 ├── data/
-│   └── movies.json           # Comprehensive movie & series catalog database
+│   └── movies.json           # Seed catalog (not read at runtime)
+├── database/
+│   └── schema.sql            # MySQL schema and default settings
 ├── includes/
-│   ├── header.php            # Multilingual navigation header & language selector
-│   ├── footer.php            # Branded footer & quick links
-│   └── db.php                # Core utility functions & data handlers
-└── lang/
-    ├── ar.php                # Arabic language dictionary (RTL)
-    ├── en.php                # English language dictionary
-    ├── fr.php                # French language dictionary
-    └── it.php                # Italian language dictionary
+│   ├── db.php                # PDO connection, catalog queries, visitor logging
+│   ├── header.php
+│   └── footer.php
+├── lang/
+│   ├── ar.php / en.php / fr.php / it.php
+└── scripts/
+    └── import_movies.php     # Import data/movies.json into media_items
 ```
 
 ---
 
-## 🚀 Local Setup & Installation
+## 🚀 Setup
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/0dh4m/movies-streaming-platform.git
-   cd movies-streaming-platform
-   ```
+### 1. Create the database
 
-2. **Run using PHP built-in server:**
-   ```bash
-   php -S localhost:8080
-   ```
+```bash
+mysql -u root -p < database/schema.sql
+```
 
-3. **Open in browser:**
-   - Navigate to `http://localhost:8080`.
+This creates `cinehub_db`, the `media_items`, `settings` and `visitors_log` tables, and the default `show_annoying_ads = 0` setting.
+
+### 2. Configure the environment
+
+`includes/db.php` reads these variables and falls back to local XAMPP defaults:
+
+```text
+MOVIES_DB_HOST=localhost
+MOVIES_DB_PORT=3306
+MOVIES_DB_NAME=cinehub_db
+MOVIES_DB_USER=root
+MOVIES_DB_PASS=
+TMDB_API_KEY=            # optional
+MOVIES_ADMIN_PASSWORD=   # required to open visitors.php
+```
+
+Set them in your shell, Apache `SetEnv`, or your hosting panel. Do not commit real credentials.
+
+### 3. Import the catalog
+
+```bash
+php scripts/import_movies.php --limit=2000
+```
+
+Remove `--limit` to import the full `data/movies.json` catalog. The importer is idempotent: re-running it updates existing rows by `(type, tmdb_id)`.
+
+### 4. Run the app
+
+```bash
+php -S localhost:8080
+```
+
+Open **http://localhost:8080**.
+
+### 5. Admin visitor log
+
+Open **http://localhost:8080/visitors.php** and enter `MOVIES_ADMIN_PASSWORD`. If the variable is empty, admin access is disabled.
 
 ---
 
-## 👨‍💻 Author & Contact
+## 🔐 Security Notes
 
-**Adham Cherkaoui Eddeqaqi (0dh4m)**  
-- **GitHub:** [@0dh4m](https://github.com/0dh4m)  
-- **Portfolio:** [0dh4m.github.io/portfolio](https://0dh4m.github.io/portfolio/)  
-- **Email:** [0dh4mm@gmail.com](mailto:0dh4mm@gmail.com)  
-- **Location:** Rabat / Salé, Morocco
+- Database credentials are **not stored in source code**; they come from environment variables.
+- `visitors.php` no longer has a hard-coded fallback password.
+- The admin password is compared with `hash_equals()`.
+- All SQL uses PDO prepared statements.
+- The visitor log stores IP addresses and user-agent summaries. If you deploy this publicly, disclose that in your privacy policy and add retention limits.
+- Rotate any database or TMDB credentials that were previously committed to this repository.
+
+---
+
+## ⚠️ Limitations
+
+- No user accounts: favorites live in `localStorage` only.
+- No video hosting or transcoding; playback depends on third-party embeds.
+- Search matches titles only (not cast or directors).
+- The visitor log is a simple table, not a full analytics platform.
+- `data/movies.json` is a seed file; the site reads from MySQL at runtime.
+- TMDB metadata is optional and requires your own API key.
+
+---
+
+## 👨‍💻 Author
+
+**Adham Cherkaoui Eddeqaqi (0dh4m)**
+- 🐙 GitHub: [@0dh4m](https://github.com/0dh4m)
+- 🌐 Portfolio: [0dh4m.github.io](https://0dh4m.github.io/)
+- ✉️ Email: [0dh4mm@gmail.com](mailto:0dh4mm@gmail.com)
+- 📍 Rabat / Salé, Morocco
+
+---
+
+## 📄 License
+
+Proprietary and confidential — see [LICENSE](LICENSE). Unauthorized copying or distribution is prohibited.
+
+*Copyright © 2026 Adham Cherkaoui Eddeqaqi (0dh4m). All rights reserved.*
